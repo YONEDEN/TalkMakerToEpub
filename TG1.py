@@ -9,11 +9,13 @@ import os
 import codecs
 
 """
-    使い方：　python TalkGet.py [URL] [File]
-    URLにあるトークメーカーのストーリーを取得してTextディレクトリにxhtmlページ(file)を作成します。
-    自動的に画像も取得します。
-    できたxhtmlファイルはSigilにつっこみ、表紙と目次等を追加すればEpub化できます。
-    今のところは吹き出し表示と背景色はナシ。
+    TG1.py
+    ほぼ主要な処理はこれで行います。神楽坂らせんさんのソースがほとんどです。
+    出力をxhtmlではなく2ndtext.datとしてTG2.pyに渡すことに変更しました。
+    取得した諸元は作品urlはworkurl.dat、作品ファイル名はWorkname.datに格納します。
+    吹き出し表示を付けられるようにclass名を付けたのですが、どうしても邪魔な<div>タグとかはこのプログラムで処理するのを
+    断念し、TG2.pyで処理させています。
+
 """
 #定数的ないろいろ
 #改行コード
@@ -109,13 +111,15 @@ def TalkGet(url,saveTextFile):
             print(fff)
             ###$$$$$strg='<BR>'+CR+str(ffd)+CR+str(fff)+CR # 吹き出しの冒頭改行いれ
             ####strg='<BR>'+CR+str(ffd)+CR+str(fff)+CR+'</p>' # 吹き出しの冒頭改行いれ
-            strg='<BR>'+CR+str(ffd)+CR+str(fff)+CR+'</p>' # 吹き出しの冒頭改行いれ
-            ##strg2='<BR>'+CR+str(ffd)+CR+str(fffx)+CR+'</p>' # 吹き出しの冒頭改行いれ
+            #strg='<BR>'+CR+str(ffd)+CR+str(fff)+CR+'</p>' # 吹き出しの冒頭改行いれ
+
+            strg=CR+str(ffd)+CR+str(fff)+CR+'</p>' # 吹き出しの冒頭改行いれ
+
             file.write(strg)
             ##strg2="■"+str(fffx)+"■"
             ##file.write(strg2)
             ##print(strg2)
-            ffff=CR+'<p class="iconClear"><BR> </p>'+CR
+            ffff=CR+'<p class="iconClear"></p>'+CR
             file.write(ffff)
             #print("吹き出し＞＞＞",f)
         else:
@@ -196,17 +200,19 @@ def imgFileGet(url):
         urllib.request.urlretrieve(url,'Images/'+fn)
 
 if __name__ == '__main__':
-    argvs = sys.argv
-    argc = len(argvs)
-    setDir()
-    print(argc)
-    if(argc < 2):
+    #argvs = sys.argv
+    #argc = len(argvs)
+    #setDir()
+    file = open('workurl.dat' ,'r')
+    urln= file.read()
+    print("読み取りurl"+urln)
+    file.close()
+    file = open('workname.dat' ,'r')
+    filn = file.read()
+    print("書き込み名"+filn)
+    file.close()
         #指定なければ鉄研ページを取得URL
-        TalkGet('https://talkmaker.com/works/episode/4c6bb92161b897ea0521474b0863662f.html','worktext.dat')
-
-    else:
-        #argcが２以上なら、指定URLを指定fileに保存(今のところ１つだけ)
-        TalkGet(argvs[1],argvs[2])
+    TalkGet(urln,'2ndtext.dat')##  整形を2ndtextに完了。しかしdiv除去前。
 
 
 ##print('モジュール名：{}'.format(__name__))  #実行したモジュール名を表示する

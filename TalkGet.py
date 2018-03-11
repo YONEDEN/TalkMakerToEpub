@@ -18,6 +18,8 @@ import codecs
 #定数的ないろいろ
 #改行コード
 CR = chr(13)    #Mac
+FUKIDASI_BR = False #キャラ画像脇のテキスト冒頭に改行を入れるかどうか
+CHARA_SIZE = '20%'  #キャラクタ画像サイズ。％かpxで指定します。
 
 
 
@@ -82,7 +84,7 @@ def TalkGet(url,saveTextFile):
                 imgSrc=f.find("img")['src']
                 print("IMGソース：",imgSrc)
                 imgFileGet(imgSrc)
-                strg = '<img src="../Images/' + os.path.basename(imgSrc) +'" class="iconL">'+CR###イメージタグ作成
+                strg = '<img src="../Images/' + os.path.basename(imgSrc) +'" class="iconL" width="'+ CHARA_SIZE +'>'+CR###イメージタグ作成
                 print(strg)
                 file.write(strg)
                 ff = div.find("div",class_="fRight")
@@ -98,7 +100,7 @@ def TalkGet(url,saveTextFile):
                 imgSrc=r.find("img")['src']
                 print("IMGソース：",imgSrc)
                 imgFileGet(imgSrc)
-                strg = '<img src="../Images/' + os.path.basename(imgSrc) +'" class="iconR">'+CR
+                strg = '<img src="../Images/' + os.path.basename(imgSrc) +'" class="iconR" width="'+ CHARA_SIZE +'>'+CR###イメージタグ作成
                 print(strg)
                 file.write(strg)
                 ff = div.find("div",class_="fLeft")
